@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model package="commerce_imagemeld" baseClass="comSimpleObject" platform="mysql" defaultEngine="InnoDB" version="1.1">
+
+    <object class="cimMeld" table="commerce_imagemeld_melds" extends="xpdoSimpleObject">
+        <field key="session_id" dbtype="varchar" precision="191" phptype="string" null="false" />
+        <field key="ip_address" dbtype="varchar" precision="50" phptype="string" null="false" />
+        <field key="item_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" />
+        <field key="order_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="true" default="" />
+        <field key="product_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" />
+        <field key="melded_file" dbtype="varchar" precision="191" phptype="string" null="true" default="" />
+        <field key="source_file" dbtype="varchar" precision="191" phptype="string" null="true" default="" />
+        <field key="created_on" dbtype="timestamp" phptype="timestamp" default="CURRENT_TIMESTAMP" attributes="ON UPDATE CURRENT_TIMESTAMP" null="true" />
+
+        <index alias="session_id" name="session_id" primary="false" unique="false" type="BTREE">
+            <column key="session_id" length="" collation="A" null="false" />
+        </index>
+        <index alias="product_id" name="product_id" primary="false" unique="false" type="BTREE">
+            <column key="product_id" length="" collation="A" null="false" />
+        </index>
+        <index alias="order_id" name="order_id" primary="false" unique="false" type="BTREE">
+            <column key="order_id" length="" collation="A" null="false" />
+        </index>
+    </object>
+</model>

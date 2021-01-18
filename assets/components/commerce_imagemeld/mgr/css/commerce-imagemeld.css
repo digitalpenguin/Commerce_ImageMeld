@@ -1,0 +1,8 @@
+.commerce-imagemeld {padding:15px; background:#F3F4F6; border-radius:3px;}
+.commerce-imagemeld-row {display:flex;}
+.commerce-imagemeld .meld {margin-right: 15px; padding:5px 15px; background:#fff; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); border-radius:3px;}
+.commerce-imagemeld h6 {font-size: 11px; text-transform: uppercase; margin:3px 0 5px;}
+.commerce-imagemeld .meld img {height:160px !important; border-radius:3px;}
+.commerce-imagemeld .meld .download-btn {display:block; background:#338fc3; border-radius:3px; color:#fff; margin:3px 0 5px; padding:6px; text-align: center; font-weight:bold;}
+.commerce-imagemeld .meld .download-btn:hover {background:#278bc2; color:#fff !important;}
+.commerce-imagemeld .meld .download-btn:focus {text-decoration: none !important;}
