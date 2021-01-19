@@ -4,6 +4,7 @@ $tplHiddenInputs = $modx->getOption('tplHiddenInputs', $scriptProperties,'commer
 $tplFileInput = $modx->getOption('tplFileInput', $scriptProperties,'commerce_imagemeld_file_input');
 $tplControls = $modx->getOption('tplControls', $scriptProperties,'commerce_imagemeld_controls');
 $tplPreview = $modx->getOption('tplPreview', $scriptProperties,'commerce_imagemeld_preview');
+$includeJs = $modx->getOption('includeJS', $scriptProperties,true);
 
 $assetsUrl = $modx->getOption('commerce_imagemeld.assets_url');
 $modx->regClientStartupScript('https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.3.0/fabric.min.js');
@@ -14,7 +15,9 @@ $modx->regClientStartupHTMLBlock("
         var cimOverlayImg = '{$scriptProperties['image']}';
     </script>
     ");
-$modx->regClientStartupScript($assetsUrl.'web/js/imagemeld.js');
+if($includeJs) {
+    $modx->regClientStartupScript($assetsUrl . 'web/js/imagemeld.js');
+}
 
 $modx->setPlaceholder('cim.canvas',$modx->getChunk($tplCanvas));
 $modx->setPlaceholder('cim.hidden_inputs',$modx->getChunk($tplHiddenInputs));

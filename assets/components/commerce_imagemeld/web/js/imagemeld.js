@@ -225,7 +225,7 @@ window.CommerceImageMeld = (function(){
         },
 
         saveMeldImg: function() {
-            canvas.backgroundColor = '#000000';
+            canvas.backgroundColor = '#ffffff';
             var multiplyBy = 1 / scale;
             var dataURL = canvas.toDataURL({multiplier: multiplyBy});
             document.getElementById("commerce-imagemeld-input-meld").value = dataURL;
