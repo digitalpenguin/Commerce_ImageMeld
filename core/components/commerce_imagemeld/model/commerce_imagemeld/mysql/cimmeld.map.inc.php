@@ -23,8 +23,9 @@ $xpdo_meta_map['cimMeld']= array (
   array (
     'session_id' => NULL,
     'ip_address' => NULL,
-    'item_id' => NULL,
-    'order_id' => 0,
+    'cart_item_id' => NULL,
+    'order_item_id' => NULL,
+    'order_id' => NULL,
     'product_id' => NULL,
     'melded_file' => '',
     'source_file' => '',
@@ -46,13 +47,21 @@ $xpdo_meta_map['cimMeld']= array (
       'phptype' => 'string',
       'null' => false,
     ),
-    'item_id' => 
+    'cart_item_id' => 
     array (
       'dbtype' => 'int',
       'precision' => '10',
       'phptype' => 'integer',
       'attributes' => 'unsigned',
       'null' => false,
+    ),
+    'order_item_id' => 
+    array (
+      'dbtype' => 'int',
+      'precision' => '10',
+      'phptype' => 'integer',
+      'attributes' => 'unsigned',
+      'null' => true,
     ),
     'order_id' => 
     array (
@@ -61,7 +70,6 @@ $xpdo_meta_map['cimMeld']= array (
       'phptype' => 'integer',
       'attributes' => 'unsigned',
       'null' => true,
-      'default' => 0,
     ),
     'product_id' => 
     array (
@@ -114,6 +122,22 @@ $xpdo_meta_map['cimMeld']= array (
         ),
       ),
     ),
+    'ip_address' => 
+    array (
+      'alias' => 'ip_address',
+      'primary' => false,
+      'unique' => false,
+      'type' => 'BTREE',
+      'columns' => 
+      array (
+        'ip_address' => 
+        array (
+          'length' => '',
+          'collation' => 'A',
+          'null' => false,
+        ),
+      ),
+    ),
     'product_id' => 
     array (
       'alias' => 'product_id',
@@ -142,7 +166,39 @@ $xpdo_meta_map['cimMeld']= array (
         array (
           'length' => '',
           'collation' => 'A',
+          'null' => true,
+        ),
+      ),
+    ),
+    'cart_item_id' => 
+    array (
+      'alias' => 'cart_item_id',
+      'primary' => false,
+      'unique' => true,
+      'type' => 'BTREE',
+      'columns' => 
+      array (
+        'cart_item_id' => 
+        array (
+          'length' => '',
+          'collation' => 'A',
           'null' => false,
+        ),
+      ),
+    ),
+    'order_item_id' => 
+    array (
+      'alias' => 'order_item_id',
+      'primary' => false,
+      'unique' => true,
+      'type' => 'BTREE',
+      'columns' => 
+      array (
+        'order_item_id' => 
+        array (
+          'length' => '',
+          'collation' => 'A',
+          'null' => true,
         ),
       ),
     ),

@@ -6,6 +6,8 @@ use modmore\Commerce\Admin\Configuration\About\ComposerPackages;
 use modmore\Commerce\Admin\Sections\SimpleSection;
 use modmore\Commerce\Events\Admin\OrderItemDetail;
 use modmore\Commerce\Events\Admin\PageEvent;
+use modmore\Commerce\Events\OrderState;
+use modmore\Commerce\Events\OrderItem;
 use modmore\Commerce\Events\Cart\Item as CartItem;
 use modmore\Commerce\Frontend\Steps\Cart;
 use modmore\Commerce\Modules\BaseModule;
@@ -57,8 +59,20 @@ class ImageMeld extends BaseModule {
         // Handles adding custom images to the order when product is added to cart
         $dispatcher->addListener(\Commerce::EVENT_ITEM_ADDED_TO_CART, [$this,'addedToCart']);
 
+        // Check for an order number
+        $dispatcher->addListener(\Commerce::EVENT_ORDERITEM_ADDED, [$this,'addedOrderItem']);
+
         // Display custom images and functions on order admin page
         $dispatcher->addListener(\Commerce::EVENT_DASHBOARD_ORDER_ITEM_DETAIL, array($this, 'showOnDetailRow'));
+    }
+
+    /**
+     * Once and order has been established (customer needs to visit checkout once) update meld record with order id
+     * @param OrderItem $event
+     */
+    public function addedOrderItem(OrderItem $event){
+        $item = $event->getItem();
+        $this->updateOrderId($item);
     }
 
     /**
@@ -108,6 +122,8 @@ class ImageMeld extends BaseModule {
         if(!$this->addToDatabase($item,$order,$meldedFilename,$srcFilename))
             $this->commerce->modx->log(MODX_LOG_LEVEL_ERROR,'Failed adding melded image data to database.');
 
+        // cartitemid represents the \comOrderItem object that is added when a product is added to cart
+        // not to be confused with the \comOrderItem object that is added when a customer moves from cart to checkout
         $item->setProperty('imagemeld.cartitemid', $item->get('id'));
         $item->setProperty('imagemeld.meldfilename', $meldedFilename);
         $item->setProperty('imagemeld.srcfilename', $srcFilename);
@@ -142,7 +158,7 @@ class ImageMeld extends BaseModule {
         $properties = [
             'session_id'    =>  session_id(),
             'ip_address'    =>  $_SERVER['REMOTE_ADDR'],
-            'item_id'       =>  $item->get('id'),
+            'cart_item_id'  =>  $item->get('id'),
             'product_id'    =>  $item->get('product'),
             'order_id'      =>  $order->get('id') ?? '',
             'melded_file'   =>  $meldFile,
@@ -153,6 +169,29 @@ class ImageMeld extends BaseModule {
 
         $meldObj->fromArray($properties);
         return $meldObj->save();
+    }
+
+    /**
+     * Once an order id is available, add it to the existing meld record
+     * @param \comOrderItem $item
+     */
+    function updateOrderId(\comOrderItem $item) : void
+    {
+        // Return early if this item hasn't been assigned to an order yet
+        if(!$item->get('order')) return;
+
+        $cartItemId = $item->getProperty('imagemeld.cartitemid');
+
+        $meldObj = $this->adapter->getObject('cimMeld',[
+            'session_id'    =>  session_id(),
+            'ip_address'    =>  $_SERVER['REMOTE_ADDR'],
+            'cart_item_id'  =>  $cartItemId
+        ]);
+        if($meldObj instanceof \cimMeld) {
+            $meldObj->set('order_id',$item->get('order'));
+            $meldObj->set('order_item_id',$item->get('id'));
+            $meldObj->save();
+        }
     }
 
     /**

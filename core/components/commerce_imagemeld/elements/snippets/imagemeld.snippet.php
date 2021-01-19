@@ -1,12 +1,9 @@
 <?php
-$productId = $modx->getOption('productId', $scriptProperties);
-if (!isset($scriptProperties['productId'])) {
-    $modx->log(MODX_LOG_LEVEL_ERROR, '[ Commerce_ImageMeld ] productId is missing from snippet call. Unable to load canvas.');
-    return '';
-}
-
-$tpl = $modx->getOption('tpl', $scriptProperties,'commerce_imagemeld_canvas');
-$tplInput = $modx->getOption('tplInput', $scriptProperties,'commerce_imagemeld_input');
+$tplCanvas = $modx->getOption('tplCanvas', $scriptProperties,'commerce_imagemeld_canvas');
+$tplHiddenInputs = $modx->getOption('tplHiddenInputs', $scriptProperties,'commerce_imagemeld_hidden_inputs');
+$tplFileInput = $modx->getOption('tplFileInput', $scriptProperties,'commerce_imagemeld_file_input');
+$tplControls = $modx->getOption('tplControls', $scriptProperties,'commerce_imagemeld_controls');
+$tplPreview = $modx->getOption('tplPreview', $scriptProperties,'commerce_imagemeld_preview');
 
 $assetsUrl = $modx->getOption('commerce_imagemeld.assets_url');
 $modx->regClientStartupScript('https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.3.0/fabric.min.js');
@@ -19,23 +16,11 @@ $modx->regClientStartupHTMLBlock("
     ");
 $modx->regClientStartupScript($assetsUrl.'web/js/imagemeld.js');
 
+$modx->setPlaceholder('cim.canvas',$modx->getChunk($tplCanvas));
+$modx->setPlaceholder('cim.hidden_inputs',$modx->getChunk($tplHiddenInputs));
+$modx->setPlaceholder('cim.file_input',$modx->getChunk($tplFileInput));
+$modx->setPlaceholder('cim.controls',$modx->getChunk($tplControls));
+$modx->setPlaceholder('cim.preview',$modx->getChunk($tplPreview));
+$modx->setPlaceholder('cim.default_css',$modx->getChunk('commerce_imagemeld_css'));
 
-$modx->regClientHTMLBlock(
-    $modx->getChunk('commerce_imagemeld_js',[
-        'image_tpl' =>  $scriptProperties['image']
-    ])
-);
-
-// Load Service
-$cim = $modx->getService('commerce_imagemeld','Commerce_ImageMeld',$modx->getOption('commerce_imagemeld.core_path', null, $modx->getOption('core_path') . 'components/commerce_imagemeld/') . 'model/commerce_imagemeld/', $scriptProperties);
-if (!($cim instanceof Commerce_ImageMeld)) {
-    $modx->log(MODX_LOG_LEVEL_ERROR,'Couldn\'t load Commerce_ImageMeld service!');
-    return '';
-}
-
-$output = $modx->getChunk($tpl,[
-    'cim.product_id'    =>  $productId
-]);
-$modx->setPlaceholder('cim.commerce_imagemeld_input',$modx->getChunk($tplInput));
-
-return $output;
+return '';

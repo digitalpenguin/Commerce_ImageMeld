@@ -7,3 +7,5 @@ $_lang['commerce_imagemeld.admin.melded_image'] = 'Melded Image';
 $_lang['commerce_imagemeld.admin.uploaded_image'] = 'Uploaded Image';
 $_lang['commerce_imagemeld.admin.custom_design'] = 'Custom Design - Attached Images';
 $_lang['commerce_imagemeld.admin.download'] = 'Download';
+
+$_lang['commerce_imagemeld.form.save'] = 'Save';

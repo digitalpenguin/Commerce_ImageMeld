@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model package="commerce_imagemeld" baseClass="comSimpleObject" platform="mysql" defaultEngine="InnoDB" version="1.1">
 
+    <!--
+    NOTE:
+        * cart_item_id represents the \comOrderItem that is created when adding product to cart.
+        * order_item_id represents the \comOrderItem that is created when customer moves to checkout from cart.
+    -->
+
     <object class="cimMeld" table="commerce_imagemeld_melds" extends="xpdoSimpleObject">
         <field key="session_id" dbtype="varchar" precision="191" phptype="string" null="false" />
         <field key="ip_address" dbtype="varchar" precision="50" phptype="string" null="false" />
-        <field key="item_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" />
-        <field key="order_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="true" default="" />
+        <field key="cart_item_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" />
+        <field key="order_item_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="true" />
+        <field key="order_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="true" />
         <field key="product_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" />
         <field key="melded_file" dbtype="varchar" precision="191" phptype="string" null="true" default="" />
         <field key="source_file" dbtype="varchar" precision="191" phptype="string" null="true" default="" />
@@ -14,11 +21,21 @@
         <index alias="session_id" name="session_id" primary="false" unique="false" type="BTREE">
             <column key="session_id" length="" collation="A" null="false" />
         </index>
+        <index alias="ip_address" name="ip_address" primary="false" unique="false" type="BTREE">
+            <column key="ip_address" length="" collation="A" null="false" />
+        </index>
         <index alias="product_id" name="product_id" primary="false" unique="false" type="BTREE">
             <column key="product_id" length="" collation="A" null="false" />
         </index>
         <index alias="order_id" name="order_id" primary="false" unique="false" type="BTREE">
-            <column key="order_id" length="" collation="A" null="false" />
+            <column key="order_id" length="" collation="A" null="true" />
+        </index>
+        <index alias="cart_item_id" name="cart_item_id" primary="false" unique="true" type="BTREE">
+            <column key="cart_item_id" length="" collation="A" null="false" />
+        </index>
+        <index alias="order_item_id" name="order_item_id" primary="false" unique="true" type="BTREE">
+            <column key="order_item_id" length="" collation="A" null="true" />
         </index>
     </object>
+
 </model>
