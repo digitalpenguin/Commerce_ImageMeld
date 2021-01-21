@@ -106,32 +106,39 @@ class ImageMeld extends BaseModule {
         if(isset($_POST['commerce_imagemeld_product_link']) && !empty($_POST['commerce_imagemeld_product_link'])) {
             $productLink = filter_input(INPUT_POST,'commerce_imagemeld_product_link',FILTER_SANITIZE_NUMBER_INT);
         }
+        if(isset($_POST['commerce_imagemeld_product_id']) && !empty($_POST['commerce_imagemeld_product_id'])) {
+            $productId = filter_input(INPUT_POST,'commerce_imagemeld_product_id',FILTER_SANITIZE_NUMBER_INT);
+        }
         $this->productUrl = $this->commerce->modx->makeUrl($productLink,'','','full');
 
         // Redirect back to product with validation error if any submitted values are missing.
-        if(!$imageSrc || !$imageMeld || !$productLink) $this->commerce->modx->sendRedirect($this->productUrl . '?cim_err=1');
+        if(!$productId || !$imageSrc || !$imageMeld || !$productLink) $this->commerce->modx->sendRedirect($this->productUrl . '?cim_err=1');
 
-        // Generate path for file based on item id and system setting commerce_imagemelds.melds_path
-        $newImgPath = $this->adapter->getOption('commerce_imagemeld.melds_path') . $itemId . '/';
 
-        // Convert base64 to image file and save on server
-        $meldedFilename = $this->saveImage($imageMeld,$newImgPath);
-        $srcFilename = $this->saveImage($imageSrc,$newImgPath,true);
+        // Make sure this order item is for the imagemeld product, otherwise ignore it.
+        if((int)$productId === (int)$item->get('product')) {
+            // Generate path for file based on item id and system setting commerce_imagemelds.melds_path
+            $newImgPath = $this->adapter->getOption('commerce_imagemeld.melds_path') . $itemId . '/';
 
-        // Index images in database (useful for cleanup later if need be)
-        if(!$this->addToDatabase($item,$order,$meldedFilename,$srcFilename))
-            $this->commerce->modx->log(MODX_LOG_LEVEL_ERROR,'Failed adding melded image data to database.');
+            // Convert base64 to image file and save on server
+            $meldedFilename = $this->saveImage($imageMeld, $newImgPath);
+            $srcFilename = $this->saveImage($imageSrc, $newImgPath, true);
 
-        // cartitemid represents the \comOrderItem object that is added when a product is added to cart
-        // not to be confused with the \comOrderItem object that is added when a customer moves from cart to checkout
-        $item->setProperty('imagemeld.cartitemid', $item->get('id'));
-        $item->setProperty('imagemeld.meldfilename', $meldedFilename);
-        $item->setProperty('imagemeld.srcfilename', $srcFilename);
+            // Index images in database (useful for cleanup later if need be)
+            if (!$this->addToDatabase($item, $order, $meldedFilename, $srcFilename))
+                $this->commerce->modx->log(MODX_LOG_LEVEL_ERROR, 'Failed adding melded image data to database.');
 
-        // Overwrite standard product image with newly melded image
-        if(!$this->overwriteItemImage($item,$meldedFilename))
-            $this->commerce->modx->log(MODX_LOG_LEVEL_ERROR,'Unable to add newly melded image to item object.');
+            // cartitemid represents the \comOrderItem object that is added when a product is added to cart
+            // not to be confused with the \comOrderItem object that is added when a customer moves from cart to checkout
+            $item->setProperty('imagemeld.cartitemid', $item->get('id'));
+            $item->setProperty('imagemeld.meldfilename', $meldedFilename);
+            $item->setProperty('imagemeld.srcfilename', $srcFilename);
 
+            // Overwrite standard product image with newly melded image
+            if (!$this->overwriteItemImage($item, $meldedFilename))
+                $this->commerce->modx->log(MODX_LOG_LEVEL_ERROR, 'Unable to add newly melded image to item object.');
+
+        }
     }
 
     /**
@@ -249,10 +256,11 @@ class ImageMeld extends BaseModule {
     {
 
         $item = $event->getItem();
+        $this->commerce->modx->log(1,print_r($item->toArray(),true));
         // Early return if item is not an image meld.
         if(!$item->getProperty('imagemeld.cartitemid')) return;
 
-        $path = $this->adapter->getOption('commerce_imagemeld.melds_url').$item->getProperty('imagemeld.cartitemid').'/';
+        $path = $this->adapter->getOption('commerce_imagemeld.melds_url') . $item->getProperty('imagemeld.cartitemid') . '/';
         $values = [
             'melded_image'  =>  [
                 'alt'   =>  $this->adapter->lexicon('commerce_imagemeld.admin.melded_image'),
@@ -263,7 +271,9 @@ class ImageMeld extends BaseModule {
                 'img'   =>  $path . $item->getProperty('imagemeld.srcfilename')
             ]
         ];
-        $output = '<div class="commerce-imagemeld"><h5>'.$this->adapter->lexicon('commerce_imagemeld.admin.custom_design').'</h5><div class="commerce-imagemeld-row">';
+        $output = '<div class="commerce-imagemeld"><h5>'
+            . $this->adapter->lexicon('commerce_imagemeld.admin.custom_design')
+            . '</h5><div class="commerce-imagemeld-row">';
         foreach ($values as $value) {
             $field = new OrderItemMeld($this->commerce, $value['alt'], $value['img']);
             $output .= $field->renderForAdmin();
@@ -290,7 +300,7 @@ class ImageMeld extends BaseModule {
             $section->addWidget(new ComposerPackages($this->commerce, [
                 'lockFile' => $lockFile,
                 'heading' => $this->adapter->lexicon('commerce.about.open_source_libraries') . ' - ' . $this->adapter->lexicon('commerce_imagemeld'),
-                'introduction' => '', // Could add information about how libraries are used, if you'd like
+                'introduction' => '',
             ]));
 
             $about = $event->getPage();

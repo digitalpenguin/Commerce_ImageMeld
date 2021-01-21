@@ -1,4 +1,5 @@
 <?php
+$productId = $modx->getOption('productId', $scriptProperties);
 $tplCanvas = $modx->getOption('tplCanvas', $scriptProperties,'commerce_imagemeld_canvas');
 $tplHiddenInputs = $modx->getOption('tplHiddenInputs', $scriptProperties,'commerce_imagemeld_hidden_inputs');
 $tplFileInput = $modx->getOption('tplFileInput', $scriptProperties,'commerce_imagemeld_file_input');
@@ -19,6 +20,8 @@ if($includeJs) {
     $modx->regClientStartupScript($assetsUrl . 'web/js/imagemeld.js');
 }
 
+
+$modx->setPlaceholder('cim.product_id',$productId);
 $modx->setPlaceholder('cim.canvas',$modx->getChunk($tplCanvas));
 $modx->setPlaceholder('cim.hidden_inputs',$modx->getChunk($tplHiddenInputs));
 $modx->setPlaceholder('cim.file_input',$modx->getChunk($tplFileInput));
