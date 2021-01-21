@@ -97,7 +97,7 @@ Snippet Parameters
 This module has a single snippet `[[Commerce_ImageMeld]]`.
 It should be added to the top of your MODX page template. The snippet doesn't return anything itself, all output is via placeholders.
 
-There are 8 parameters available in total. Only one is required.
+There are 8 parameters available in total. Only two are required.
 
 **Required**
 - `&productId`: **REQUIRED** The product id of the ImageMeld product.
