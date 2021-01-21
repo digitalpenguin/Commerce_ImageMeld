@@ -254,9 +254,7 @@ class ImageMeld extends BaseModule {
 
     public function showOnDetailRow(OrderItemDetail $event)
     {
-
         $item = $event->getItem();
-        $this->commerce->modx->log(1,print_r($item->toArray(),true));
         // Early return if item is not an image meld.
         if(!$item->getProperty('imagemeld.cartitemid')) return;
 
