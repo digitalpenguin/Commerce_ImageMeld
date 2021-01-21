@@ -166,6 +166,7 @@ $category->addMany($snippets);
 unset($snippets);
 $modx->log(modX::LOG_LEVEL_INFO,'Packaged in snippets.');
 
+
 $attr = [
     xPDOTransport::UNIQUE_KEY => 'category',
     xPDOTransport::PRESERVE_KEYS => false,
@@ -177,11 +178,18 @@ $attr = [
             xPDOTransport::UPDATE_OBJECT => true,
             xPDOTransport::UNIQUE_KEY => 'name',
         ],
+        'Snippets' => [
+            xPDOTransport::PRESERVE_KEYS => false,
+            xPDOTransport::UPDATE_OBJECT => true,
+            xPDOTransport::UNIQUE_KEY => 'name',
+        ],
     ]
 ];
 
+
 $vehicle = $builder->createVehicle($category,$attr);
 $builder->putVehicle($vehicle);
+
 
 /* now pack in the license file, readme and setup options */
 $builder->setPackageAttributes([
