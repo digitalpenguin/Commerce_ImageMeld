@@ -94,16 +94,16 @@ $modx->log(modX::LOG_LEVEL_INFO,'Packaged in core, requirements validator, and m
  *
  * If you have web-accessible assets in core/components/<package>/, then uncomment this section to package them too
  */
-//$builder->package->put(
-//    [
-//        'source' => $sources['source_assets'],
-//        'target' => "return MODX_ASSETS_PATH . 'components/';",
-//    ],
-//    [
-//        'vehicle_class' => 'xPDOFileVehicle',
-//    ]
-//);
-//$modx->log(modX::LOG_LEVEL_INFO,'Packaged in assets.'); flush();
+$builder->package->put(
+    [
+        'source' => $sources['source_assets'],
+        'target' => "return MODX_ASSETS_PATH . 'components/';",
+    ],
+    [
+        'vehicle_class' => 'xPDOFileVehicle',
+    ]
+);
+$modx->log(modX::LOG_LEVEL_INFO,'Packaged in assets.'); flush();
 
 /**
  * Settings
@@ -124,6 +124,64 @@ if (is_array($settings)) {
     $modx->log(modX::LOG_LEVEL_INFO,'Packaged in ' . count($settings) . ' system settings.'); flush();
     unset($settings,$setting,$attributes);
 }
+
+/**
+ * Category
+ */
+$category= $modx->newObject('modCategory');
+$category->set('category','Commerce_ImageMeld');
+$modx->log(modX::LOG_LEVEL_INFO,'Created category.');
+
+/**
+ * Chunks
+ */
+$chunkSource = include $sources['data'].'chunks.php';
+$chunks = [];
+foreach($chunkSource as $name => $options) {
+    $chunks[$name] = $modx->newObject('modChunk');
+    $chunks[$name]->fromArray([
+        'name' => $name,
+        'description' => $options['description'],
+        'content' => file_get_contents($sources['source_core'] . $options['file']),
+    ], '', true, true);
+}
+$category->addMany($chunks);
+unset($chunks);
+$modx->log(modX::LOG_LEVEL_INFO,'Packaged in chunks.');
+
+/**
+ * Snippets
+ */
+$snippetSource = include $sources['data'].'snippets.php';
+$snippets = [];
+foreach($snippetSource as $name => $options) {
+    $snippets[$name] = $modx->newObject('modSnippet');
+    $snippets[$name]->fromArray([
+        'name' => $name,
+        'description' => $options['description'],
+        'snippet' => getSnippetContent($sources['source_core'].$options['file']),
+    ],'',true,true);
+}
+$category->addMany($snippets);
+unset($snippets);
+$modx->log(modX::LOG_LEVEL_INFO,'Packaged in snippets.');
+
+$attr = [
+    xPDOTransport::UNIQUE_KEY => 'category',
+    xPDOTransport::PRESERVE_KEYS => false,
+    xPDOTransport::UPDATE_OBJECT => true,
+    xPDOTransport::RELATED_OBJECTS => true,
+    xPDOTransport::RELATED_OBJECT_ATTRIBUTES => [
+        'Chunks' => [
+            xPDOTransport::PRESERVE_KEYS => false,
+            xPDOTransport::UPDATE_OBJECT => true,
+            xPDOTransport::UNIQUE_KEY => 'name',
+        ],
+    ]
+];
+
+$vehicle = $builder->createVehicle($category,$attr);
+$builder->putVehicle($vehicle);
 
 /* now pack in the license file, readme and setup options */
 $builder->setPackageAttributes([

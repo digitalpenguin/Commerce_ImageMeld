@@ -1,5 +1,5 @@
-Commerce_ImageMeld for Commerce 0.1.0-pl
+Commerce_ImageMeld for Commerce 1.0.0-beta
 ---------------------------------
-Released on
+Released on 21/1/2021
 
 - First release

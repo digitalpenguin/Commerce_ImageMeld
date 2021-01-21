@@ -7,6 +7,11 @@ if ($transport->xpdo) {
         case xPDOTransport::ACTION_INSTALL:
             $modx =& $transport->xpdo;
 
+            $modelPath = $modx->getOption('core_path').'components/commerce_imagemeld/model/';
+            $modx->addPackage('commerce_imagemeld', $modelPath);
+            $manager = $modx->getManager();
+            $manager->createObjectContainer('cimMeld');
+
             $modx->log(modX::LOG_LEVEL_INFO, 'Loading/updating available modules...');
 
             $corePath = $modx->getOption('commerce.core_path', null, $modx->getOption('core_path') . 'components/commerce/');

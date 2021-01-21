@@ -20,7 +20,6 @@ if($includeJs) {
     $modx->regClientStartupScript($assetsUrl . 'web/js/imagemeld.js');
 }
 
-
 $modx->setPlaceholder('cim.product_id',$productId);
 $modx->setPlaceholder('cim.canvas',$modx->getChunk($tplCanvas));
 $modx->setPlaceholder('cim.hidden_inputs',$modx->getChunk($tplHiddenInputs));
