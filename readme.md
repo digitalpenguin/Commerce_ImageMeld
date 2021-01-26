@@ -40,7 +40,8 @@ Requirements
 Installation
 -
 
-Install via the MODX package manager.
+1. Install via the MODX package manager.
+2. Enable the module in Commerce (Dashboard -> Configuration -> Modules)
 
 Setup
 -

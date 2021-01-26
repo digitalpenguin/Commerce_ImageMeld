@@ -114,7 +114,6 @@ class ImageMeld extends BaseModule {
         // Redirect back to product with validation error if any submitted values are missing.
         if(!$productId || !$imageSrc || !$imageMeld || !$productLink) $this->commerce->modx->sendRedirect($this->productUrl . '?cim_err=1');
 
-
         // Make sure this order item is for the imagemeld product, otherwise ignore it.
         if((int)$productId === (int)$item->get('product')) {
             // Generate path for file based on item id and system setting commerce_imagemelds.melds_path
