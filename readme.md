@@ -115,3 +115,154 @@ write your own.
 - `&tplControls`: value should be the name of a custom controls chunk.
 - `&tplPreview`: value should be the name of a custom preview chunk.
 
+
+Example
+==
+
+Here's an example implementation for an imaginary custom skateboard design with screenshots and then full template code below.
+This has been implemented using Foundation but can easily be refactored for Tailwind, Bootstrap etc.
+
+1. Before uploading an image:
+![screenshot0](https://user-images.githubusercontent.com/5160368/105943032-5a882000-609b-11eb-982d-a6e4c6af4f09.png)
+
+
+2. After uploading an image and positioning with the controls:
+![screenshot1](https://user-images.githubusercontent.com/5160368/105943066-6c69c300-609b-11eb-9550-9d44f42cda7b.png)
+
+
+3. After saving the image, this implementation opens a modal where the customer can select the quantity and add to cart.
+![screenshot2](https://user-images.githubusercontent.com/5160368/105943086-7db2cf80-609b-11eb-90f9-8477216059dd.png)
+   
+
+4. The order view in the Commerce manager page. Both source image and melded image are available for download:
+   ![screenshot3](https://user-images.githubusercontent.com/5160368/105943108-899e9180-609b-11eb-844e-2c824d49db6f.png)
+   
+
+Example Template
+==
+
+```
+<!doctype html>
+<html lang="en">
+<head>
+    <title>[[*pagetitle]] - [[++site_name]]</title>
+    <base href="[[!++site_url]]" />
+    <meta charset="[[++modx_charset]]" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/css/foundation-float.min.css" integrity="sha256-4ldVyEvC86/kae2IBWw+eJrTiwNEbUUTmN0zkP4luL4=" crossorigin="anonymous">
+    
+    [[Commerce_ImageMeld?
+        &image=`[[++assets_url]]skateboard.png`
+        &tplControls=`customControls`
+        &productId=`11`
+    ]]
+    
+    <style>
+        [[+cim.default_css]]
+        body { 
+            padding:60px 0;
+        }
+        .edit-region {
+            position:relative;
+        }
+        .commerce-imagemeld-buttons {
+            position:absolute;
+            top:0;
+            left:0;
+            z-index:10;
+            display:flex;
+            flex-direction:column;
+        }
+        .commerce-imagemeld-buttons button {
+            padding:10px;
+            background-color:#222;
+            cursor:pointer;
+        }
+        .commerce-imagemeld-buttons button:hover {
+            background-color:#444;
+        }
+        .upload-image {
+            position:absolute;
+            top:0;
+            right:0;
+            z-index:10;
+        }
+        
+    </style>
+</head>
+<body>
+
+
+<div class="row">
+    <div class="columns medium-offset-2 medium-5">
+        <div class="edit-region">
+            <div class="upload-image">
+                <label for="commerce-imagemeld-input-file" class="button">Upload Image</label>
+                <input type="file" class="show-for-sr" id="commerce-imagemeld-input-file">
+            </div>
+            [[+cim.controls]]
+            [[+cim.canvas]]
+        </div>
+    </div>
+    <div class="columns medium-3 end">
+        
+        <label>Save and preview your design</label>
+        <div class="save-image">
+            <button type="button" class="button" id="commerce-imagemeld-save-btn">[[%commerce_imagemeld.form.save? &namespace=`commerce_imagemeld` &topic=`default` &language=`[[++cultureKey]]`]]</button>
+        </div>
+    </div>
+</div>
+
+<div class="reveal small" id="previewModal" data-reveal>
+    <div class="row">
+        <div class="columns medium-9">
+            [[+cim.preview]]
+        </div>
+        <div class="columns medium-3">
+            <form method="post" id="commerce-imagemeld-form" action="[[~[[++commerce.cart_resource]]]]" enctype="multipart/form-data">
+                <input type="hidden" name="add_to_cart" value="1">
+                
+                <input type="hidden" name="commerce_imagemeld_product_id" id="commerce-imagemeld-product" value="[[+cim.product_id]]">
+                <input type="hidden" name="commerce_imagemeld_product_link" value="[[*id]]">
+                <input type="hidden" name="commerce_imagemeld_input_meld" id="commerce-imagemeld-input-meld">
+                <input type="hidden" name="commerce_imagemeld_input_src" id="commerce-imagemeld-input-src">
+                
+                <label for="quantity">Quantity</label>
+	            <input type="number" id="quantity" name="products[ [[+cim.product_id]] ][quantity]" value="1">
+	                
+                <button class="button" type="submit">Add to Cart</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="reveal" id="errorModal" data-reveal>
+    [[- Add your own lexicon and text here ]]
+    You must upload an image before saving your design.
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/js/foundation.min.js" integrity="sha256-pRF3zifJRA9jXGv++b06qwtSqX1byFQOLjqa2PTEb2o=" crossorigin="anonymous"></script>
+<script>
+    $(document).foundation();
+</script>
+<script>
+    CommerceImageMeld.onReady(function() {
+        document.getElementById('commerce-imagemeld-save-btn').addEventListener('click', function (e) {
+            // Check image has been uploaded
+            if(document.getElementById('commerce-imagemeld-input-src').value) {
+                $('#previewModal').foundation('open');
+            } else {
+                $('#errorModal').foundation('open');
+            }
+        });
+    });
+</script>
+</body>
+</html>
+
+```
+
+This implementation also uses a custom chunk for the controls in order to separate the save button from the other controls.
+The `customControls` chunk is the same as the default just with the save button removed.
