@@ -88,7 +88,8 @@ as flexible as possible. You can even modify them and add your own (see snippet 
   be a modal window that shows on save along with the add to cart form/button, but it can be placed anywhere)_
 - `[[+cim.hidden_inputs]]` - this holds all the values needed to be submitted along with the add to cart form. 
   **(must be placed inside the `<form></form>` tags.)**
-  
+- `[[+cim.error_msg]]`  - Outputs error msg if something goes wrong.
+
 5. Success!
 
 
@@ -242,6 +243,10 @@ Example Template
     You must upload an image before saving your design.
 </div>
 
+<div class="reveal" id="errorReturnModal" data-reveal>
+    [[+cim.error_msg]]
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/js/foundation.min.js" integrity="sha256-pRF3zifJRA9jXGv++b06qwtSqX1byFQOLjqa2PTEb2o=" crossorigin="anonymous"></script>
 <script>
@@ -257,6 +262,9 @@ Example Template
                 $('#errorModal').foundation('open');
             }
         });
+        if(cimError !== false) {
+            $('#errorReturnModal').foundation('open');
+        }
     });
 </script>
 </body>
