@@ -1,3 +1,11 @@
+Commerce_ImageMeld for Commerce 1.0.0-beta2
+---------------------------------
+Released on 2/2/2021
+
+- Added system settings for min width and min height.
+- Added error_msg placeholder
+- Added JS and PHP detection of image size
+
 Commerce_ImageMeld for Commerce 1.0.0-beta
 ---------------------------------
 Released on 21/1/2021
