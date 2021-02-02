@@ -21,4 +21,12 @@ return [
         'area' => 'Paths',
         'value' => '{assets_url}imagemelds/',
     ],
+    'min_width' => [
+        'area' => 'Image Uploads',
+        'value' => '',
+    ],
+    'min_height' => [
+        'area' => 'Image Uploads',
+        'value' => '',
+    ],
 ];

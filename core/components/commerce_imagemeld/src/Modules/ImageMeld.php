@@ -213,6 +213,7 @@ class ImageMeld extends BaseModule {
         $data = explode(',', $base64String);
         $decodedImg = base64_decode($data[1]);
         if($isSrc) {
+            $this->checkMinimumSize($base64String);
             $filename = $this->determineFileType($decodedImg);
         }
         $fullPath = $newImgPath . $filename;
@@ -224,6 +225,29 @@ class ImageMeld extends BaseModule {
         fwrite($ifp, $decodedImg);
         fclose($ifp);
         return $filename;
+    }
+
+    /**
+     * Checks for values in the min_width and min_height system settings. If empty, the sizing is ignored.
+     * If settings have a value it is compared with image sizing and redirects to product page with param ?cim_err=3
+     * @param $base64String
+     */
+    function checkMinimumSize($base64String) {
+        // Check min size requirements
+        list($width, $height, $type, $attr) = getimagesize($base64String);
+        $minWidth = $this->adapter->getOption('commerce_imagemeld.min_width');
+        $minHeight = $this->adapter->getOption('commerce_imagemeld.min_height');
+
+        if($minWidth) {
+            if($minWidth > $width) {
+                $this->commerce->modx->sendRedirect($this->productUrl . '?cim_err=3');
+            }
+        }
+        if($minHeight) {
+            if($minHeight > $height) {
+                $this->commerce->modx->sendRedirect($this->productUrl . '?cim_err=3');
+            }
+        }
     }
 
     /**
