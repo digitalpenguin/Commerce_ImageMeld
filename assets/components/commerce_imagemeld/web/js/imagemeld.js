@@ -174,6 +174,31 @@ window.CommerceImageMeld = (function(){
             srcFile = this.getFileInput().files[0];
             var url = URL.createObjectURL(srcFile);
 
+            // Check size of src image if necessary
+            if(cimMinWidth !== '' || cimMinHeight !== '') {
+                var sizeImg = new Image();
+                sizeImg.onload = function () {
+                    var sizes = {
+                        width: this.width,
+                        height: this.height
+                    };
+                    URL.revokeObjectURL(this.src);
+
+                    if (cimMinWidth !== '') {
+                        if(parseInt(cimMinWidth) > parseInt(sizes.width)) {
+                            api.redirectToError(3);
+                        }
+                    }
+                    if (cimMinHeight !== '') {
+                        if(parseInt(cimMinHeight) > parseInt(sizes.height)) {
+                            api.redirectToError(3);
+                        }
+                    }
+                }
+                sizeImg.src = URL.createObjectURL(srcFile);
+            }
+
+
             /*
             var fileType = srcFile.type;
             if (fileType === 'image/png') { //check if png
@@ -222,6 +247,12 @@ window.CommerceImageMeld = (function(){
                 srcFileReader.readAsDataURL(srcFile);
             }
 
+        },
+
+        redirectToError: function(errorType) {
+            var currentUrl = window.location.href;
+            var newUrl = currentUrl.split('?')[0]
+            window.location.href = newUrl + '?cim_err=3';
         },
 
         saveMeldImg: function() {

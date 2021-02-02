@@ -23,10 +23,12 @@ return [
     ],
     'min_width' => [
         'area' => 'Image Uploads',
+        'xtype' => 'numberfield',
         'value' => '',
     ],
     'min_height' => [
         'area' => 'Image Uploads',
+        'xtype' => 'numberfield',
         'value' => '',
     ],
 ];
