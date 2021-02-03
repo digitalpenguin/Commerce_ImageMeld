@@ -32,7 +32,7 @@ to download directly or open the full-sized image in a new window.
 1. Install via the MODX package manager.
 2. Enable the module in Commerce (Dashboard -> Configuration -> Modules)
 
-##Setup
+## Setup
 
 1. **System Settings:** Set the `commerce_imagemeld.melds_path` and `commerce_imagemeld.melds_url` to 
 your preferred location or leave as the default.
@@ -84,7 +84,7 @@ as flexible as possible. You can even modify them and add your own (see snippet 
 5. Success!
 
 
-##Snippet Parameters
+## Snippet Parameters
 
 This module has a single snippet `[[Commerce_ImageMeld]]`.
 It should be added to the top of your MODX page template. The snippet doesn't return anything itself, all output is via placeholders.
