@@ -1,5 +1,4 @@
-Image Meld for Commerce on MODX
-==
+# Image Meld for Commerce on MODX
 
 **Enables customers to meld/merge images to create custom designs when purchasing products.**
 
@@ -21,30 +20,20 @@ When viewing the order in the manager, thumbnails of both images are shown on ea
 to download directly or open the full-sized image in a new window.
 
 
-Requirements
--
+## Requirements: 
 
-- MODX CMS 2.6.5 +
-  
-  https://modx.com/download
-  
-
-- Commerce for MODX 1.2 +
-
-  https://modmore.com/commerce/  
-
-
+- [MODX CMS 2.6.5 +](https://modx.com/download)
+- [Commerce for MODX 1.2 +](https://modmore.com/commerce/)
 - PHP 7.1 +
 
 
-Installation
--
+## Installation
 
 1. Install via the MODX package manager.
 2. Enable the module in Commerce (Dashboard -> Configuration -> Modules)
 
-Setup
--
+##Setup
+
 1. **System Settings:** Set the `commerce_imagemeld.melds_path` and `commerce_imagemeld.melds_url` to 
 your preferred location or leave as the default.
 
@@ -59,9 +48,9 @@ In addition to the `&productId` parameter, the snippet requires an `&image` para
 
 The snippet must be called uncached `[[!`
    
-Example:
+### Example:
 
-```
+``` php
 [[!Commerce_ImageMeld?
     &productId=`10`
     &image=`[[++assets_url]]uploads/template.png`
@@ -70,7 +59,7 @@ Example:
 
 or
 
-```
+``` php
 [[!Commerce_ImageMeld?
     &productId=`10`
     &image=`[[*my_template_var]]`
@@ -95,8 +84,7 @@ as flexible as possible. You can even modify them and add your own (see snippet 
 5. Success!
 
 
-Snippet Parameters
--
+##Snippet Parameters
 
 This module has a single snippet `[[Commerce_ImageMeld]]`.
 It should be added to the top of your MODX page template. The snippet doesn't return anything itself, all output is via placeholders.
@@ -119,8 +107,7 @@ write your own.
 - `&tplPreview`: value should be the name of a custom preview chunk.
 
 
-Example
-==
+### Example:
 
 Here's an example implementation for an imaginary custom skateboard design with screenshots and then full template code below.
 This has been implemented using Foundation but can easily be refactored for Tailwind, Bootstrap etc.
@@ -141,10 +128,9 @@ This has been implemented using Foundation but can easily be refactored for Tail
    ![screenshot3](https://user-images.githubusercontent.com/5160368/105943108-899e9180-609b-11eb-844e-2c824d49db6f.png)
    
 
-Example Template
-==
+### Example Template
 
-```
+``` html
 <!doctype html>
 <html lang="en">
 <head>
