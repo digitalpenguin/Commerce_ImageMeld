@@ -24,7 +24,7 @@ if (!defined('MOREPROVIDER_BUILD')) {
     define('PKG_NAME', 'Commerce_ImageMeld');
     define('PKG_NAMESPACE', 'commerce_imagemeld');
     define('PKG_VERSION', '1.0.0');
-    define('PKG_RELEASE', 'beta2');
+    define('PKG_RELEASE', 'beta3');
 
     /* load modx */
     require_once dirname(__DIR__) . '/config.core.php';

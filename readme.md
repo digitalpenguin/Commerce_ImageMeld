@@ -264,6 +264,11 @@ Example Template
         });
         if(cimError !== false) {
             $('#errorReturnModal').foundation('open');
+            
+            // Optional: add the following to remove params from url to prevent modal showing again on page reload.
+            var currentUrl = window.location.href;
+            var newUrl = currentUrl.split('?')[0];
+            window.history.replaceState({}, document.title, newUrl);
         }
     });
 </script>
