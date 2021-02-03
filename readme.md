@@ -56,11 +56,13 @@ In addition to the `&productId` parameter, the snippet requires an `&image` para
    along with the path to your image. Or, you could use a TV. 
    
 **This must be a PNG image.**
+
+The snippet must be called uncached `[[!`
    
 Example:
 
 ```
-[[Commerce_ImageMeld?
+[[!Commerce_ImageMeld?
     &productId=`10`
     &image=`[[++assets_url]]uploads/template.png`
 ]]
@@ -69,7 +71,7 @@ Example:
 or
 
 ```
-[[Commerce_ImageMeld?
+[[!Commerce_ImageMeld?
     &productId=`10`
     &image=`[[*my_template_var]]`
 ]]
