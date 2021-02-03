@@ -1,4 +1,12 @@
 <?php
+// Set general product fields as placeholders
+$comImageMeld = $modx->getService(
+    'commerce_imagemeld',
+    'Commerce_ImageMeld',
+    $modx->getOption('commerce_imagemeld.core_path', null, $modx->getOption('core_path').'components/commerce_imagemeld/').'model/commerce_imagemeld/',$scriptProperties
+);
+if (!$comImageMeld instanceof \Commerce_ImageMeld) return '';
+
 $productId = $modx->getOption('productId', $scriptProperties);
 $tplCanvas = $modx->getOption('tplCanvas', $scriptProperties,'commerce_imagemeld_canvas');
 $tplHiddenInputs = $modx->getOption('tplHiddenInputs', $scriptProperties,'commerce_imagemeld_hidden_inputs');
@@ -7,30 +15,15 @@ $tplControls = $modx->getOption('tplControls', $scriptProperties,'commerce_image
 $tplPreview = $modx->getOption('tplPreview', $scriptProperties,'commerce_imagemeld_preview');
 $includeJs = $modx->getOption('includeJS', $scriptProperties,true);
 
+
+
 // Set as str for JavaScript
 $error = 'false';
 // Check for a return error
 $errorParam = filter_input(INPUT_GET,'cim_err',FILTER_SANITIZE_NUMBER_INT);
 if($errorParam) {
     $error = $errorParam;
-    // Set error message to placeholder
-    switch($errorParam) {
-        case 1:
-            // Not all params submitted
-            $errorMsg = $modx->lexicon('commerce_imagemeld.error.missing_params');
-            break;
-        case 2:
-            // Invalid image
-            $errorMsg = $modx->lexicon('commerce_imagemeld.error.invalid_image_type');
-            break;
-        case 3:
-            // Image too small
-            $errorMsg =  $modx->lexicon('commerce_imagemeld.error.image_too_small');
-            break;
-        default:
-            // Something went wrong
-            $errorMsg = $modx->lexicon('commerce_imagemeld.error');
-    }
+    $errorMsg = $comImageMeld->getErrorMsg($errorParam);
     $modx->setPlaceholder('cim.error_msg',$errorMsg);
 }
 
@@ -61,5 +54,9 @@ $modx->setPlaceholder('cim.preview',$modx->getChunk($tplPreview));
 $modx->setPlaceholder('cim.default_css',$modx->getChunk('commerce_imagemeld_css'));
 
 
+$product = $comImageMeld->commerce->adapter->getObject('comProduct', ['id' => $productId, 'removed' => false]);
+if ($product instanceof \comProduct) {
+    $modx->setPlaceholders($product->toArray());
+}
 
 return '';

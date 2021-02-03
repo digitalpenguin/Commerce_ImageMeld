@@ -65,4 +65,31 @@ class Commerce_ImageMeld {
         }
         return $option;
     }
+
+    /**
+     * Returns error message from lexicon based on error parameter 1,2,3
+     * @param $errorParam
+     * @return mixed
+     */
+    public function getErrorMsg($errorParam) {
+        // Set error message to placeholder
+        switch($errorParam) {
+            case 1:
+                // Not all params submitted
+                $errorMsg = $this->commerce->adapter->lexicon('commerce_imagemeld.error.missing_params');
+                break;
+            case 2:
+                // Invalid image
+                $errorMsg = $this->commerce->adapter->lexicon('commerce_imagemeld.error.invalid_image_type');
+                break;
+            case 3:
+                // Image too small
+                $errorMsg =  $this->commerce->adapter->lexicon('commerce_imagemeld.error.image_too_small');
+                break;
+            default:
+                // Something went wrong
+                $errorMsg = $this->commerce->adapter->lexicon('commerce_imagemeld.error');
+        }
+        return $errorMsg;
+    }
 }
