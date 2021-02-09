@@ -113,19 +113,23 @@ Here's an example implementation for an imaginary custom skateboard design with 
 This has been implemented using Foundation but can easily be refactored for Tailwind, Bootstrap etc.
 
 1. Before uploading an image:
+
 ![screenshot0](https://user-images.githubusercontent.com/5160368/105943032-5a882000-609b-11eb-982d-a6e4c6af4f09.png)
 
 
 2. After uploading an image and positioning with the controls:
+
 ![screenshot1](https://user-images.githubusercontent.com/5160368/105943066-6c69c300-609b-11eb-9550-9d44f42cda7b.png)
 
 
 3. After saving the image, this implementation opens a modal where the customer can select the quantity and add to cart.
+
 ![screenshot2](https://user-images.githubusercontent.com/5160368/105943086-7db2cf80-609b-11eb-90f9-8477216059dd.png)
    
 
 4. The order view in the Commerce manager page. Both source image and melded image are available for download:
-   ![screenshot3](https://user-images.githubusercontent.com/5160368/105943108-899e9180-609b-11eb-844e-2c824d49db6f.png)
+
+![screenshot3](https://user-images.githubusercontent.com/5160368/105943108-899e9180-609b-11eb-844e-2c824d49db6f.png)
    
 
 ### Example Template
